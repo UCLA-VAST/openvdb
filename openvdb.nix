@@ -1,14 +1,15 @@
-{ nixpkgs, ... }:
+{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+
+  with pkgs;
 let
-  pkgs = import nixpkgs {
-    system = "x86_64-linux";
+  pkgs = import pkgs {
     overlays = [ (import ./overlay.nix) ];
+  } { inherit system;
   };
 in
-  with pkgs;
   stdenv.mkDerivation {
     name = "openvdb";
-    version = "9.0.0";
+    version = "10.0.0";
 
   # https://nixos.org/nix/manual/#builtin-filterSource
   src = builtins.filterSource
