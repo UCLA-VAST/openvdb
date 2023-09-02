@@ -651,6 +651,7 @@ public:
     /// @throw RuntimeError if sweepingVoxelCount() or boundaryVoxelCount() return zero.
     ///        This might happen if none of the initialization methods above were called
     ///        or if that initialization failed.
+    template <typename SdfValueT = typename SdfGridT::ValueType>
     SdfValueT sweep(int nIter = 1,
                bool finalize = true,
                bool computeMax = false);
@@ -843,7 +844,8 @@ bool FastSweeping<SdfGridT, ExtValueT>::initMask(const SdfGridT &sdfGrid, const 
     return this->isValid();
 }// FastSweeping::initMask
 
-template <typename SdfGridT, typename ExtValueT>
+template <typename SdfGridT, typename ExtValueT> 
+template <typename SdfValueT>
 SdfValueT FastSweeping<SdfGridT, ExtValueT>::sweep(int nIter, bool finalize, bool computeMax)
 {
     if (!mSdfGrid) {
@@ -1942,7 +1944,7 @@ dilateSdf(const GridT &sdfGrid,
     return fs.sdfGrid();
 }
 
-template<typename GridT, typename MaskTreeT>
+template<typename GridT, typename MaskTreeT, typename SdfValueT = typename GridT::ValueType>
 typename GridT::Ptr
 maskSdf(const GridT &sdfGrid,
         const Grid<MaskTreeT> &mask,
@@ -1951,7 +1953,7 @@ maskSdf(const GridT &sdfGrid,
         bool resurfaceReachable)
 {
     FastSweeping<GridT> fs;
-    GridT::ValueType reachableMax;
+    SdfValueT reachableMax;
     if (fs.initMask(sdfGrid, mask, ignoreActiveTiles)) {
         reachableMax = fs.sweep(nIter, /*finalize*/ !resurfaceReachable,
             /*computeMax*/ resurfaceReachable);
