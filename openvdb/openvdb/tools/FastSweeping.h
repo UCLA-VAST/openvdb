@@ -437,7 +437,7 @@ dilateSdf(const GridT &sdfGrid,
 ///
 /// @details Topology of the output SDF is determined by the union of the active
 ///          voxels (or optionally values) in @a sdfGrid and @a mask.
-template<typename GridT, typename MaskTreeT>
+template<typename GridT, typename MaskTreeT, typename SdfValueT = typename GridT::ValueType>
 typename GridT::Ptr
 maskSdf(const GridT &sdfGrid,
         const Grid<MaskTreeT> &mask,
@@ -1944,7 +1944,7 @@ dilateSdf(const GridT &sdfGrid,
     return fs.sdfGrid();
 }
 
-template<typename GridT, typename MaskTreeT, typename SdfValueT = typename GridT::ValueType>
+template<typename GridT, typename MaskTreeT, typename SdfValueT>
 typename GridT::Ptr
 maskSdf(const GridT &sdfGrid,
         const Grid<MaskTreeT> &mask,
