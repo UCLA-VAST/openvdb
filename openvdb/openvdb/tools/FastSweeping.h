@@ -1960,7 +1960,7 @@ maskSdf(const GridT &sdfGrid,
     }
 
     if (resurfaceReachable)
-      return levelSetRebuild(*fs.sdfGrid(), reachableMax);
+      return levelSetRebuild(*fs.sdfGrid(), reachableMax + 1);
     
     return fs.sdfGrid();
 }
