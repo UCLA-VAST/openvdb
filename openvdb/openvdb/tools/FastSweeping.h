@@ -1959,8 +1959,15 @@ maskSdf(const GridT &sdfGrid,
             /*computeMax*/ resurfaceReachable);
     }
 
-    if (resurfaceReachable)
-      return levelSetRebuild(*fs.sdfGrid(), reachableMax + 1);
+    if (resurfaceReachable) {
+      // reachableMax + 1 doesn't work to recover the exact border
+      // of the original mask grid, due to impl. details
+      auto eroded_ls = levelSetRebuild(*fs.sdfGrid(), reachableMax);
+      // you need a second call to wrap / dilate the ls by 1
+      // this is simlar to requirement in topologyToLevelSet where
+      // you must close by at least 1
+      return levelSetRebuild(*eroded_ls, 1);
+    }
     
     return fs.sdfGrid();
 }
